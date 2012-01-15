@@ -3,7 +3,7 @@
 ### Features
 * No dependencies
 * Works with chunks of a data - no need to buffer the whole request
-* Almost no internal buffering. Buffer size is not more then the size of the boundary ~ 60-70 bytes
+* Almost no internal buffering. Buffer size doesn't exceed the size of the boundary (~60-70 bytes)
 
 Tested as part of [Cosmonaut](https://github.com/iafonov/cosmonaut) HTTP server.
 

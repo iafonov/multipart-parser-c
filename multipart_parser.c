@@ -292,6 +292,7 @@ int multipart_parser_execute(multipart_parser* p, const char *buf, size_t len) {
         if (p->_s->index == 0 && i == len - 1) {
           i++;
           EMIT_PART_DATA_CB(part_data);
+          i--; // otherwise this method returns len+1
         }
         break;
       case s_end:

@@ -7,7 +7,7 @@
 
 #include "multipart_parser.h"
 
-#ifdef DEBUG
+#ifdef DEBUG_MULTIPART
 #include <stdio.h>
 #define log(M, ...) fprintf(stderr, "[HTTP_MULTIPART_PARSER] %s:%d: " M "\n", __FILE__, __LINE__, ##__VA_ARGS__)
 #else

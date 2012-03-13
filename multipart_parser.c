@@ -7,7 +7,7 @@
 
 #include "multipart_parser.h"
 
-#ifdef DEBUG
+#ifdef DEBUG_MULTIPART
 #include <stdio.h>
 #define log(M, ...) fprintf(stderr, "[HTTP_MULTIPART_PARSER] %s:%d: " M "\n", __FILE__, __LINE__, ##__VA_ARGS__)
 #else
@@ -292,6 +292,7 @@ int multipart_parser_execute(multipart_parser* p, const char *buf, size_t len) {
         if (p->_s->index == 0 && i == len - 1) {
           i++;
           EMIT_PART_DATA_CB(part_data);
+          i--; // otherwise this method returns len+1
         }
         break;
       case s_end:

@@ -11,4 +11,7 @@ Implementation based on [node-formidable](https://github.com/felixge/node-formid
 
 Inspired by [http-parser](https://github.com/joyent/http-parser) by [Ryan Dahl](https://github.com/ry).
 
+### Contributors:
+* [Daniel T. Wagner](http://www.danieltwagner.de/)
+
 © 2012 [Igor Afonov](http://iafonov.github.com)

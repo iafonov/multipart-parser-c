@@ -5,7 +5,8 @@
 #ifndef _multipart_parser_h
 #define _multipart_parser_h
 
-#include <sys/types.h>
+#include <stdlib.h>
+#include <ctype.h>
 
 typedef struct multipart_parser multipart_parser;
 typedef struct multipart_parser_settings multipart_parser_settings;
@@ -30,7 +31,7 @@ struct multipart_parser_settings {
   multipart_notify_cb on_body_end;
 };
 
-multipart_parser* init_multipart_parser(char *boundary, multipart_parser_settings* settings);
+multipart_parser* init_multipart_parser(char *boundary, const multipart_parser_settings* settings);
 void free_multipart_parser(multipart_parser* p);
 
 int multipart_parser_execute(multipart_parser* p, const char *buf, size_t len);

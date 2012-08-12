@@ -51,11 +51,6 @@ do {                                                                   \
 
 #define LF 10
 #define CR 13
-#define SPACE 32
-#define HYPHEN 45
-#define COLON 58
-#define A 97
-#define Z 122
 
 struct multipart_parser_state {
   size_t index;
@@ -167,18 +162,18 @@ int multipart_parser_execute(multipart_parser* p, const char *buf, size_t len) {
           break;
         }
 
-        if (c == HYPHEN) {
+        if (c == '-') {
           break;
         }
 
-        if (c == COLON) {
+        if (c == ':') {
           EMIT_DATA_CB(header_field);
           p->_s->state = s_header_value_start;
           break;
         }
 
         cl = tolower(c);
-        if (cl < A || cl > Z) {
+        if (cl < 'a' || cl > 'z') {
           return i;
         }
 
@@ -194,7 +189,7 @@ int multipart_parser_execute(multipart_parser* p, const char *buf, size_t len) {
         break;
       case s_header_value_start:
         multipart_log("s_header_value_start");
-        if (c == SPACE) {
+        if (c == ' ') {
           break;
         }
 
@@ -249,7 +244,7 @@ int multipart_parser_execute(multipart_parser* p, const char *buf, size_t len) {
           if (c == CR) {
             /* CR = part boundary */
             p->_s->flags |= f_part_boundary;
-          } else if (c == HYPHEN) {
+          } else if (c == '-') {
             /* HYPHEN = end boundary */
             p->_s->flags |= f_last_boundary;
           } else {
@@ -267,7 +262,7 @@ int multipart_parser_execute(multipart_parser* p, const char *buf, size_t len) {
               break;
             }
           } else if (p->_s->flags & f_last_boundary) {
-            if (c == HYPHEN) {
+            if (c == '-') {
               p->_s->index++;
             } else {
               p->_s->index = 0;

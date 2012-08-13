@@ -13,5 +13,6 @@ Inspired by [http-parser](https://github.com/joyent/http-parser) by [Ryan Dahl](
 
 ### Contributors:
 * [Daniel T. Wagner](http://www.danieltwagner.de/)
+* [James McLaughlin](http://udp.github.com/)
 
 © 2012 [Igor Afonov](http://iafonov.github.com)

@@ -110,7 +110,7 @@ void free_multipart_parser(multipart_parser* p) {
   free(p);
 }
 
-int multipart_parser_execute(multipart_parser* p, const char *buf, size_t len) {
+size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len) {
   size_t i;
   size_t mark = 0;
   size_t prev_index = 0;

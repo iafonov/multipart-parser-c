@@ -5,6 +5,11 @@
 #ifndef _multipart_parser_h
 #define _multipart_parser_h
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdlib.h>
 #include <ctype.h>
 
@@ -37,5 +42,9 @@ multipart_parser* init_multipart_parser
 void free_multipart_parser(multipart_parser* p);
 
 size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len);
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif

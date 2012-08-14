@@ -104,7 +104,6 @@ multipart_parser* init_multipart_parser(char *boundary, const multipart_parser_s
   p->_s->state = s_start;
   p->_s->settings = settings;
   p->_s->flags = 0;
-  p->_s->lookbehind = NULL;
   p->_s->parsed = 0;
   return p;
 }

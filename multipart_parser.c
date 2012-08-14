@@ -87,7 +87,9 @@ enum parser_flags {
   f_last_boundary
 };
 
-multipart_parser* init_multipart_parser(char *boundary, const multipart_parser_settings* settings) {
+multipart_parser* init_multipart_parser
+    (const char *boundary, const multipart_parser_settings* settings) {
+
   multipart_parser* p = malloc(sizeof(multipart_parser) +
                                sizeof(multipart_parser_state) +
                                strlen(boundary) +

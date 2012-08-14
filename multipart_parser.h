@@ -31,7 +31,9 @@ struct multipart_parser_settings {
   multipart_notify_cb on_body_end;
 };
 
-multipart_parser* init_multipart_parser(char *boundary, const multipart_parser_settings* settings);
+multipart_parser* init_multipart_parser
+    (const char *boundary, const multipart_parser_settings* settings);
+
 void free_multipart_parser(multipart_parser* p);
 
 size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len);

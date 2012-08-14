@@ -5,6 +5,11 @@
 #ifndef _multipart_parser_h
 #define _multipart_parser_h
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <stdlib.h>
 #include <ctype.h>
 
@@ -31,9 +36,15 @@ struct multipart_parser_settings {
   multipart_notify_cb on_body_end;
 };
 
-multipart_parser* init_multipart_parser(char *boundary, const multipart_parser_settings* settings);
+multipart_parser* init_multipart_parser
+    (const char *boundary, const multipart_parser_settings* settings);
+
 void free_multipart_parser(multipart_parser* p);
 
-int multipart_parser_execute(multipart_parser* p, const char *buf, size_t len);
+size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len);
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 #endif

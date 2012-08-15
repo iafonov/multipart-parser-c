@@ -1,4 +1,4 @@
-CFLAGS?=-ansi -pedantic -O4 -Wall
+CFLAGS?=-std=c89 -ansi -pedantic -O4 -Wall
 
 default: multipart_parser.o
 

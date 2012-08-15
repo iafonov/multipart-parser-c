@@ -87,30 +87,34 @@ enum parser_flags {
   f_last_boundary
 };
 
-multipart_parser* init_multipart_parser(char *boundary, const multipart_parser_settings* settings) {
+multipart_parser* init_multipart_parser
+    (const char *boundary, const multipart_parser_settings* settings) {
+
   multipart_parser* p = malloc(sizeof(multipart_parser) +
                                sizeof(multipart_parser_state) +
-                               strlen(boundary));
+                               strlen(boundary) +
+                               strlen(boundary) + 9);
+
   p->_s = (multipart_parser_state *) (p + 1);
 
   strcpy(p->_s->multipart_boundary, boundary);
   p->_s->boundary_length = strlen(boundary);
+  
+  p->_s->lookbehind = (p->_s->multipart_boundary + p->_s->boundary_length + 1);
 
   p->_s->index = 0;
   p->_s->state = s_start;
   p->_s->settings = settings;
   p->_s->flags = 0;
-  p->_s->lookbehind = NULL;
   p->_s->parsed = 0;
   return p;
 }
 
 void free_multipart_parser(multipart_parser* p) {
-  free(p->_s->lookbehind);
   free(p);
 }
 
-int multipart_parser_execute(multipart_parser* p, const char *buf, size_t len) {
+size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len) {
   size_t i;
   size_t mark = 0;
   size_t prev_index = 0;
@@ -122,20 +126,18 @@ int multipart_parser_execute(multipart_parser* p, const char *buf, size_t len) {
     switch (p->_s->state) {
       case s_start:
         multipart_log("s_start");
-        p->_s->lookbehind = malloc(p->_s->boundary_length + 8 + 1);
-
         p->_s->index = 0;
         p->_s->state = s_start_boundary;
         break;
       case s_start_boundary:
         multipart_log("s_start_boundary");
-        if (p->_s->index == strlen(p->_s->multipart_boundary) - 1) {
+        if (p->_s->index == p->_s->boundary_length - 1) {
           if (c != CR) {
             return i;
           }
           p->_s->index++;
           break;
-        } else if (p->_s->index == (strlen(p->_s->multipart_boundary))) {
+        } else if (p->_s->index == p->_s->boundary_length) {
           if (c != LF) {
             return i;
           }
@@ -174,6 +176,7 @@ int multipart_parser_execute(multipart_parser* p, const char *buf, size_t len) {
 
         cl = tolower(c);
         if (cl < 'a' || cl > 'z') {
+          multipart_log("invalid character in header name");
           return i;
         }
 

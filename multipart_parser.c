@@ -254,15 +254,15 @@ size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len
         }
         EMIT_PART_DATA_CB(p->lookbehind, 1);
         p->state = s_part_data;
-        -- i; 
+        mark = i --;
         break;
 
       case s_part_data_boundary:
         multipart_log("s_part_data_boundary");
         if (p->multipart_boundary[p->index] != c) {
-          p->state = s_part_data;
           EMIT_PART_DATA_CB(p->lookbehind, 2 + p->index);
-          -- i; 
+          p->state = s_part_data;
+          mark = i --;
           break;
         }
         p->lookbehind[2 + p->index] = c;

@@ -30,23 +30,15 @@ do {                                                                   \
   }                                                                    \
 } while (0)
 
-#define EMIT_DATA_CB(FOR)                                              \
+#define EMIT_DATA_CB(FOR, ptr, len)                                    \
 do {                                                                   \
-  if (p->settings->on_##FOR) {                                     \
-    if (p->settings->on_##FOR(p, (buf + mark), (i - mark)) != 0) { \
+  if (p->settings->on_##FOR) {                                         \
+    if (p->settings->on_##FOR(p, ptr, len) != 0) {                     \
       return i;                                                        \
     }                                                                  \
   }                                                                    \
 } while (0)
 
-#define EMIT_PART_DATA_CB(ptr, len)                                    \
-do {                                                                   \
-  if (len > 0 && p->settings->on_part_data) {                          \
-    if (p->settings->on_part_data(p, ptr, len) != 0) {                 \
-      return i;                                                        \
-    }                                                                  \
-  }                                                                    \
-} while (0)
 
 #define LF 10
 #define CR 13
@@ -173,7 +165,7 @@ size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len
         }
 
         if (c == ':') {
-          EMIT_DATA_CB(header_field);
+          EMIT_DATA_CB(header_field, buf + mark, i - mark);
           p->state = s_header_value_start;
           break;
         }
@@ -184,7 +176,7 @@ size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len
           return i;
         }
         if (is_last)
-            EMIT_DATA_CB(header_field);
+            EMIT_DATA_CB(header_field, buf + mark, (i - mark) + 1);
         break;
 
       case s_headers_almost_done:
@@ -209,11 +201,11 @@ size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len
       case s_header_value:
         multipart_log("s_header_value");
         if (c == CR) {
-          EMIT_DATA_CB(header_value);
+          EMIT_DATA_CB(header_value, buf + mark, i - mark);
           p->state = s_header_value_almost_done;
         }
         if (is_last)
-            EMIT_DATA_CB(header_value);
+            EMIT_DATA_CB(header_value, buf + mark, (i - mark) + 1);
         break;
 
       case s_header_value_almost_done:
@@ -234,14 +226,14 @@ size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len
       case s_part_data:
         multipart_log("s_part_data");
         if (c == CR) {
-            EMIT_PART_DATA_CB(buf + mark, i - mark);
+            EMIT_DATA_CB(part_data, buf + mark, i - mark);
             mark = i;
             p->state = s_part_data_almost_boundary;
             p->lookbehind[0] = CR;
             break;
         }
         if (is_last)
-            EMIT_PART_DATA_CB(buf + mark, i - mark);
+            EMIT_DATA_CB(part_data, buf + mark, (i - mark) + 1);
         break;
 
       case s_part_data_almost_boundary:
@@ -252,7 +244,7 @@ size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len
             p->index = 0;
             break;
         }
-        EMIT_PART_DATA_CB(p->lookbehind, 1);
+        EMIT_DATA_CB(part_data, p->lookbehind, 1);
         p->state = s_part_data;
         mark = i --;
         break;
@@ -260,7 +252,7 @@ size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len
       case s_part_data_boundary:
         multipart_log("s_part_data_boundary");
         if (p->multipart_boundary[p->index] != c) {
-          EMIT_PART_DATA_CB(p->lookbehind, 2 + p->index);
+          EMIT_DATA_CB(part_data, p->lookbehind, 2 + p->index);
           p->state = s_part_data;
           mark = i --;
           break;

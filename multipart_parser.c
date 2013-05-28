@@ -23,8 +23,8 @@ static void multipart_log(const char * format, ...)
 
 #define NOTIFY_CB(FOR)                                                 \
 do {                                                                   \
-  if (p->settings->on_##FOR) {                                     \
-    if (p->settings->on_##FOR(p) != 0) {                           \
+  if (p->settings->on_##FOR) {                                         \
+    if (p->settings->on_##FOR(p) != 0) {                               \
       return i;                                                        \
     }                                                                  \
   }                                                                    \

@@ -114,7 +114,7 @@ size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len
   char c, cl;
   int is_last = 0;
 
-  while(!is_last) {
+  while(i < len) {
     c = buf[i];
     is_last = (i == (len - 1));
     switch (p->state) {

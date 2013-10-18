@@ -61,7 +61,7 @@ public:
         memset(&m_callbacks, 0, sizeof(multipart_parser_settings));
         m_callbacks.on_header_field = ReadHeaderName;
         m_callbacks.on_header_value = ReadHeaderValue;
-        
+
         m_parser = multipart_parser_init(boundary.c_str(), &callbacks);
         multipart_parser_set_data(m_parser, this);
     }
@@ -76,7 +76,7 @@ public:
         multipart_parser_execute(m_parser, body.c_str(), body.size());
         return m_headers;
     }
-    
+
 private:
     static int ReadHeaderName(multipart_parser* p, const char *at, size_t length)
     {
@@ -93,5 +93,6 @@ private:
 ### Contributors
 * [Daniel T. Wagner](http://www.danieltwagner.de/)
 * [James McLaughlin](http://udp.github.com/)
+* [Jay Miller](http://www.cryptofreak.org)
 
 © 2012 [Igor Afonov](http://iafonov.github.com)

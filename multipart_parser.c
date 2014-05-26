@@ -199,6 +199,7 @@ size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len
         if (c == CR) {
           EMIT_DATA_CB(header_value, buf + mark, i - mark);
           p->state = s_header_value_almost_done;
+          break;
         }
         if (is_last)
             EMIT_DATA_CB(header_value, buf + mark, (i - mark) + 1);

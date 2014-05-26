@@ -160,10 +160,6 @@ size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len
           break;
         }
 
-        if (c == '-') {
-          break;
-        }
-
         if (c == ':') {
           EMIT_DATA_CB(header_field, buf + mark, i - mark);
           p->state = s_header_value_start;
@@ -171,7 +167,7 @@ size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len
         }
 
         cl = tolower(c);
-        if (cl < 'a' || cl > 'z') {
+        if ((c != '-') && (cl < 'a' || cl > 'z')) {
           multipart_log("invalid character in header name");
           return i;
         }

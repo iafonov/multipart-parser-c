@@ -62,7 +62,7 @@ public:
         m_callbacks.on_header_field = ReadHeaderName;
         m_callbacks.on_header_value = ReadHeaderValue;
 
-        m_parser = multipart_parser_init(boundary.c_str(), &callbacks);
+        m_parser = multipart_parser_init(boundary.c_str(), &m_callbacks);
         multipart_parser_set_data(m_parser, this);
     }
 

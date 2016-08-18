@@ -222,7 +222,7 @@ size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len
       /* fallthrough */
       case s_part_data:
         multipart_log("s_part_data");
-        if (c == CR) {
+        if (c == CR && i >= len - p->boundary_length - 6) {
             EMIT_DATA_CB(part_data, buf + mark, i - mark);
             mark = i;
             p->state = s_part_data_almost_boundary;

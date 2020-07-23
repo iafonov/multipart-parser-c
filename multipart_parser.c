@@ -141,6 +141,9 @@ size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len
           p->state = s_header_field_start;
           break;
         }
+        if(i < 2) {
+          break; // first '--'
+        }
         if (c != p->multipart_boundary[p->index]) {
           return i;
         }
@@ -237,6 +240,7 @@ size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len
         multipart_log("s_part_data_almost_boundary");
         if (c == LF) {
             p->state = s_part_data_boundary;
+            i += 2; // first '--'
             p->lookbehind[1] = LF;
             p->index = 0;
             break;

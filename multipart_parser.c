@@ -1,4 +1,4 @@
-/* Based on node-formidable by Felix Geisendörfer 
+/* Based on node-formidable by Felix Geisendörfer
  * Igor Afonov - afonov@gmail.com - 2012
  * MIT License - http://www.opensource.org/licenses/mit-license.php
  */
@@ -83,10 +83,13 @@ multipart_parser* multipart_parser_init
   multipart_parser* p = malloc(sizeof(multipart_parser) +
                                strlen(boundary) +
                                strlen(boundary) + 9);
+  if (!p) {
+    return NULL;
+  }
 
   strcpy(p->multipart_boundary, boundary);
   p->boundary_length = strlen(boundary);
-  
+
   p->lookbehind = (p->multipart_boundary + p->boundary_length + 1);
 
   p->index = 0;
@@ -272,7 +275,7 @@ size_t multipart_parser_execute(multipart_parser* p, const char *buf, size_t len
             break;
         }
         return i;
-   
+
       case s_part_data_final_hyphen:
         multipart_log("s_part_data_final_hyphen");
         if (c == '-') {
